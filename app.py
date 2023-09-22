@@ -16,6 +16,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = f'postgresql://{user}:{password}@{host}:
 db.init_app(app)
 
 from models.course import Course
+from models.user import User
 
 
 @app.route('/')
@@ -23,6 +24,11 @@ def hello_world():
     rec = db.get_or_404(Course, 1)
     return render_template('index.html', user=rec)
 
+@app.route('/users')
+def users():
+    user_recs = db.session.query(User).all()
+    users = list(map(lambda rec: rec.__dict__, user_recs))
+    return render_template('users.html', users=users)
 
 @app.route('/courses')
 def courses():
