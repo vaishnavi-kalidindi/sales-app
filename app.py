@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template,redirect,url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 
@@ -26,8 +26,8 @@ from routes import courses
 
 @app.route('/')
 def hello_world():
-    rec = db.get_or_404(User, 1)
-    return render_template('index.html', user=rec)
+     
+    return redirect(url_for('users'))
 
 
  
