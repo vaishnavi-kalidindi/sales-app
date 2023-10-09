@@ -1,6 +1,6 @@
 {%- extends "base.html" %}
 
- {% block content %}
+{% block content %}
     <h3>Users Dashboard</h3>
     <table id="data" class="table table-striped">
         <thead>
@@ -10,16 +10,18 @@
                 <th>Last Name</th>
                 <th>Username</th>
                 <th>Email</th>
+                <th>Action</th> <!-- Added Action column -->
             </tr>
         </thead>
         <tbody>
             {% for user in users %}
             <tr>
-                <td>{{ user.id }}</td>
+                <td><a href="{{ url_for('user', id=user.id) }}">{{ user.id }}</a></td>
                 <td>{{ user.first_name }}</td>
                 <td>{{ user.last_name }}</td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>
+                <td><a href="{{ url_for('user', id=user.id, action='edit') }}" class="btn btn-primary">Edit</a></td>
             </tr>
             {% endfor %}
         </tbody>
