@@ -26,9 +26,8 @@ from routes import courses
 
 @app.route('/')
 def hello_world():
-    rec = db.get_or_404(Course, 1)
+    rec = db.get_or_404(User, 1)
     return render_template('index.html', user=rec)
-
 
 
  
