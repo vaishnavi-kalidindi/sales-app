@@ -3,11 +3,29 @@ from flask import render_template,request, \
 from app import app
 from app import db
 from models.user import User
+from sqlalchemy import or_  # Import the 'or_' operator
+
 @app.route('/users')
 def users():
-    user_recs = db.session.query(User).all()
+    search_query = request.args.get('search', '')
+    
+    if search_query:
+        # Split the search query into individual words
+        search_terms = search_query.split()
+        
+        # Build a dynamic filter for each search term, combining them with 'or_'
+        filters = [User.email.ilike(f"%{term}%") for term in search_terms]
+        
+        # Apply the filters using 'or_'
+        user_recs = db.session.query(User).filter(or_(*filters)).all()
+    else:
+        # If no search query provided, retrieve all users
+        user_recs = db.session.query(User).all()
+
     users = list(map(lambda rec: rec.__dict__, user_recs))
     return render_template('users.html', users=users)
+
+
 
 
 @app.route('/user', methods=['GET', 'POST'])
