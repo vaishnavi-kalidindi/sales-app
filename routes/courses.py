@@ -3,11 +3,22 @@ redirect,url_for
 from app import app
 from app import db
 from models.course import Course
+from sqlalchemy import or_
+
 
 @app.route('/courses')
 def courses():
-    course= db.session.query(Course).all()
-    courses = list(map(lambda rec: rec.__dict__, course))
+    search_query = request.args.get('search', '')
+    
+    if search_query:
+        # Build a dynamic filter to search for course titles containing the query
+        filter_condition = Course.course_name.ilike(f"%{search_query}%")
+        course_recs = db.session.query(Course).filter(filter_condition).all()
+    else:
+        # If no search query provided, retrieve all courses
+        course_recs = db.session.query(Course).all()
+
+    courses = list(map(lambda rec: rec.__dict__, course_recs))
     return render_template('courses.html', courses=courses)
 
 @app.route('/course', methods=['GET','POST'])
