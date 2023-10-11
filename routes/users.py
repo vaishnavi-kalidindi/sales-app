@@ -20,7 +20,7 @@ def users():
         user_recs = db.session.query(User).filter(or_(*filters)).all()
     else:
         # If no search query provided, retrieve all users
-        user_recs = db.session.query(User).all()
+        user_recs = db.session.query(User).all() 
 
     users = list(map(lambda rec: rec.__dict__, user_recs))
     return render_template('users.html', users=users)
@@ -34,6 +34,9 @@ def user():
     if request.method == 'GET':
         if id:
             user=User.query.get(id)
+            if not user:
+                app.logger.error(f'User with id {id} not found... ')
+                return redirect(url_for('users'))
             form_action=request.args.get('action')
             if form_action == 'edit':
                 return render_template('user_form.html', user=user)

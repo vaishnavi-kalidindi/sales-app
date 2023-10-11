@@ -5,6 +5,7 @@ from flask_bootstrap import Bootstrap
 
 db = SQLAlchemy()
 app = Flask(__name__)
+app.logger.setLevel('INFO')
 Bootstrap(app)
 
 host = os.environ.get('SALES_DB_HOST')
@@ -13,6 +14,7 @@ db_name = os.environ.get('SALES_DB_NAME')
 user = os.environ.get('SALES_DB_USER')
 password = os.environ.get('SALES_DB_PASS')
 app.config["SQLALCHEMY_DATABASE_URI"] = f'postgresql://{user}:{password}@{host}:{port}/{db_name}'
+app.config['SQLALCHEMY_ECHO'] = eval(os.environ.get('LOG_SQL_QUERIES','FALSE'))
 db.init_app(app)
 
 from models.user import User
