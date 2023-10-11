@@ -28,6 +28,9 @@ def course():
         course_id = request.args.get('course_id')
         if course_id:
             course = Course.query.get(course_id)
+            if not course:
+                app.logger.error(f'Course with id {course_id} not found... ')
+                return redirect(url_for('courses'))
             form_action = request.args.get('action')
             if form_action == 'edit':
                 return render_template('course_form.html', course=course)
