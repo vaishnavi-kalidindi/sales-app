@@ -3,7 +3,7 @@ from flask import render_template,request, \
 from app import app
 from app import db
 from models.user import User
-from sqlalchemy import or_  # Import the 'or_' operator
+   # Import the 'or_' operator
 
 @app.route('/users')
 def users():
@@ -24,8 +24,6 @@ def users():
 
     users = list(map(lambda rec: rec.__dict__, user_recs))
     return render_template('users.html', users=users)
-
-
 
 
 @app.route('/user', methods=['GET', 'POST'])
